@@ -1,0 +1,28 @@
+<body style="text-align:center; font-family:sans-serif; padding:20px;">
+    <h2>📦 ຕິດຕາມອໍເດີ</h2>
+    <input type="text" id="oid" placeholder="ກອກລະຫັດອໍເດີ">
+    <button onclick="track()">ກວດສອບ</button>
+    <div id="res" style="display:none; margin-top:20px; border:1px solid #ccc; padding:20px;">
+        <h3 id="cname"></h3>
+        <img id="img" src="" style="width:200px;"><br>
+        <p id="det"></p>
+        <div style="display:flex; justify-content:space-around; font-weight:bold;">
+            <p id="s1">1. ປີ້ນສີ</p><p id="s2">2. ໂລເສື້ອ</p><p id="s3">3. ຍີບເສື້ອ</p>
+        </div>
+    </div>
+    <script>
+        function track() {
+            fetch('/api/track/' + document.getElementById('oid').value).then(r => r.json()).then(d => {
+                if(d.status==='success'){
+                    document.getElementById('res').style.display='block';
+                    document.getElementById('cname').innerText = d.customer_name;
+                    document.getElementById('det').innerText = d.detail;
+                    document.getElementById('img').src = "/static/uploads/" + d.image;
+                    document.getElementById('s1').style.color = d.current_status >= 1 ? 'green':'gray';
+                    document.getElementById('s2').style.color = d.current_status >= 2 ? 'green':'gray';
+                    document.getElementById('s3').style.color = d.current_status >= 3 ? 'green':'gray';
+                }
+            });
+        }
+    </script>
+</body>
