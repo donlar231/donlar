@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body style="text-align: center; font-family: sans-serif;">
+    <h2>ພະແນກ: {{ role }} (User: {{ user }})</h2>
+    <div id="reader" style="width: 400px; margin: auto;"></div>
+    <p><a href="/logout">Logout</a></p>
+
+    <script>
+        function onScanSuccess(decodedText) {
+            fetch('/api/scan-update', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ order_id: decodedText })
+            }).then(res => res.json()).then(data => {
+                if(data.status === 'success') {
+                    alert("ອັບເດດອໍເດີ " + decodedText + " ສຳເລັດ!");
+                }
+            });
+        }
+        let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+</body>
+</html>
